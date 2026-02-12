@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Sleep and Circadian Rhythms in the Wild",
+    "year": 2024,
+    "url": "https://example.com/paper1",
+    "source": "Google Scholar",
+    "venue": "Nature Human Behavior",
+    "authors": ["Patrycja Lebiecka-Johansen", "John Doe", "Jane Smith"]
+  },
+  {
+    "title": "Machine Learning for Wearable Data Analysis",
+    "year": 2023,
+    "url": "https://example.com/paper2",
+    "source": "ORCID",
+    "venue": "IEEE Transactions on Biomedical Engineering",
+    "authors": ["Alice Johnson", "Patrycja Lebiecka-Johansen"]
+  }
+]
