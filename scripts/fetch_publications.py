@@ -57,11 +57,10 @@ def fetch_orcid_publications(orcid_id):
                 
     return works
 
-def fetch_google_scholar_publications(author_name):
-    print(f"Searching Google Scholar for {author_name}...")
+def fetch_google_scholar_publications(author_id):
+    print(f"Searching Google Scholar for ID {author_id}...")
     try:
-        search_query = scholarly.search_author(author_name)
-        author = next(search_query)
+        author = scholarly.search_author_id(author_id)
         scholarly.fill(author, sections=['publications'])
         
         works = []
@@ -69,23 +68,15 @@ def fetch_google_scholar_publications(author_name):
             title = pub.get('bib', {}).get('title')
             year = pub.get('bib', {}).get('pub_year')
             
-            # Scholarly sometimes fills limited data. 
-            # To get full details (like url), we might need `scholarly.fill(pub)`.
-            # Doing this for all pubs might be slow/rate-limited. 
-            # I'll stick to basic info for now and fill if needed.
-            
             works.append({
                 "title": title,
                 "year": int(year) if year and year.isdigit() else 0,
-                "url": pub.get('pub_url'), # Often requires fill()
+                "url": pub.get('pub_url'), 
                 "source": "Google Scholar",
                 "venue": pub.get('bib', {}).get('venue') or pub.get('bib', {}).get('journal'),
-                "authors": pub.get('bib', {}).get('author', '').split(' and ') # simplistic splitting
+                "authors": pub.get('bib', {}).get('author', '').split(' and ')
             })
         return works
-    except StopIteration:
-        print("Author not found on Google Scholar.")
-        return []
     except Exception as e:
         print(f"Error fetching Google Scholar data: {e}")
         return []
@@ -120,7 +111,7 @@ if __name__ == "__main__":
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     
     orcid_data = fetch_orcid_publications(ORCID_ID)
-    scholar_data = fetch_google_scholar_publications(AUTHOR_NAME)
+    scholar_data = fetch_google_scholar_publications(GOOGLE_SCHOLAR_ID)
     
     final_list = merge_publications(orcid_data, scholar_data)
     

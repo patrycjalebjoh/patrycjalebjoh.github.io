@@ -16,21 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderPublications(pubs) {
         pubListContainer.innerHTML = '';
-        
+
         // Sort by year desc ensuring logic consistency if not already sorted
         pubs.sort((a, b) => b.year - a.year);
 
         pubs.forEach(pub => {
             const article = document.createElement('article');
             article.className = 'publication-item';
-            
+
             // Highlight my name
             // Note: Simplistic text replacement. Ideally, use structured author lists.
             let authorHtml = "";
             if (Array.isArray(pub.authors)) {
                 authorHtml = pub.authors.map(author => {
                     // Check for loose match
-                    if (author.toLowerCase().includes("lebiecka") || author.toLowerCase().includes("patrycja")) {
+                    const lowerAuthor = author.toLowerCase();
+                    if (lowerAuthor.includes("lebiecka") || lowerAuthor.includes("patrycja") || lowerAuthor.includes("książek") || lowerAuthor.includes("ksiazek")) {
                         return `<strong>${author}</strong>`;
                     }
                     return author;
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <a href="${pub.url}" target="_blank" class="pub-tag">Paper</a>
                 </div>` : ''}
             `;
-            
+
             pubListContainer.appendChild(article);
         });
     }
