@@ -1,18 +1,82 @@
 [
   {
-    "title": "Sleep and Circadian Rhythms in the Wild",
-    "year": 2024,
-    "url": "https://example.com/paper1",
-    "source": "Google Scholar",
-    "venue": "Nature Human Behavior",
-    "authors": ["Patrycja Lebiecka-Johansen", "John Doe", "Jane Smith"]
+    "title": "Benefits of Different Strategies to Adapt Sleep Scoring Models from Scalp- to Ear-EEG",
+    "year": 2025,
+    "url": "https://pure.au.dk/portal/en/publications/5d6eb38b-a69a-4fd0-8819-b459f57fab33",
+    "source": "ORCID",
+    "venue": "I E E E Engineering in Medicine and Biology Society. Conference Proceedings",
+    "authors": [
+      "Patrycja Lebiecka-Johansen"
+    ]
   },
   {
-    "title": "Machine Learning for Wearable Data Analysis",
-    "year": 2023,
-    "url": "https://example.com/paper2",
+    "title": "Classification of Hearing Status Based on Pupil Measures During Sentence Perception",
+    "year": 2025,
+    "url": "https://doi.org/10.1044/2024_JSLHR-24-00005",
     "source": "ORCID",
-    "venue": "IEEE Transactions on Biomedical Engineering",
-    "authors": ["Alice Johnson", "Patrycja Lebiecka-Johansen"]
+    "venue": "Journal of Speech, Language, and Hearing Research",
+    "authors": [
+      "Patrycja Lebiecka-Johansen"
+    ]
+  },
+  {
+    "title": "Evaluation of Ear-EEG based Automatic Sleep Staging Performance",
+    "year": 2024,
+    "url": "https://pure.au.dk/portal/en/publications/08feb100-30b0-4b6d-b064-9703bcefacc7",
+    "source": "ORCID",
+    "venue": "Journal of Sleep Research",
+    "authors": [
+      "Patrycja Lebiecka-Johansen"
+    ]
+  },
+  {
+    "title": "Time-specific Components of Pupil Responses Reveal Alternations in Effort Allocation Caused by Memory Task Demands During Speech Identification in Noise",
+    "year": 2023,
+    "url": "https://www.scopus.com/inward/record.url?eid=2-s2.0-85150531693&partnerID=MN8TOARS",
+    "source": "ORCID",
+    "venue": "Trends in Hearing",
+    "authors": [
+      "Patrycja Lebiecka-Johansen"
+    ]
+  },
+  {
+    "title": "A Glimpse of Memory Through the Eyes: Pupillary Responses Measured During Encoding Reflect the Likelihood of Subsequent Memory Recall in an Auditory Free Recall Test",
+    "year": 2022,
+    "url": "http://dx.doi.org/10.1177/23312165221130581",
+    "source": "ORCID",
+    "venue": "Trends in Hearing",
+    "authors": [
+      "Patrycja Lebiecka-Johansen"
+    ]
+  },
+  {
+    "title": "A Glimpse of Memory Through the Eyes",
+    "year": 2022,
+    "url": "https://pure.au.dk/portal/en/publications/ef34a756-22d9-4951-8886-1ac2548f18c0",
+    "source": "ORCID",
+    "venue": "Trends in Hearing",
+    "authors": [
+      "Patrycja Lebiecka-Johansen"
+    ]
+  },
+  {
+    "title": "Effect of Speech-to-Noise Ratio and Luminance on a Range of Current and Potential Pupil Response Measures to Assess Listening Effort",
+    "year": 2021,
+    "url": "https://www.scopus.com/inward/record.url?eid=2-s2.0-85105135393&partnerID=MN8TOARS",
+    "source": "ORCID",
+    "venue": "Trends in Hearing",
+    "authors": [
+      "Patrycja Lebiecka-Johansen"
+    ]
+  },
+  {
+    "title": "Toward a more comprehensive understanding of the impact of masker type and signal-to-noise ratio on the pupillary response while performing a speech-in-noise test",
+    "year": 2018,
+    "url": "http://www.scopus.com/inward/record.url?eid=2-s2.0-85047539775&partnerID=MN8TOARS",
+    "source": "ORCID",
+    "venue": "Hearing Research",
+    "authors": [
+      "Patrycja Lebiecka-Johansen"
+    ]
   }
 ]
