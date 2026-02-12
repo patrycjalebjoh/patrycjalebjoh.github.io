@@ -106,49 +106,54 @@ def fetch_google_scholar_publications(author_id):
         print(f"Error fetching Google Scholar data: {e}")
         return []
 
-def merge_publications(orcid_pubs, scholar_pubs):
+def load_existing_publications():
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            with open(OUTPUT_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return []
+    return []
+
+def merge_publications(existing_pubs, scholar_pubs, orcid_pubs):
     merged = {}
     
     def normalize(text):
         if not text: return ""
         return ''.join(e for e in text if e.isalnum()).lower()
 
-    # Start with Google Scholar (richer author data)
-    for p in scholar_pubs:
+    # 1. Load Existing (Highest Priority - prohibits overwriting manual edits)
+    for p in existing_pubs:
         key = normalize(p['title'])
         merged[key] = p
         
-    # Merge ORCID (better links/DOIs)
-    for p in orcid_pubs:
+    # 2. Process fetched data (Only add if new)
+    fetched_list = scholar_pubs + orcid_pubs
+    
+    for p in fetched_list:
         key = normalize(p['title'])
-        if key in merged:
-            existing = merged[key]
-            # update URL if ORCID has one and Scholar does not (or ORCID has DOI)
-            if p.get('url') and 'doi.org' in p['url']:
-                existing['url'] = p['url']
-            elif p.get('url') and not existing.get('url'):
-                existing['url'] = p['url']
-                
-            # If Scholar failed to get venue, take ORCID
-            if not existing.get('venue') and p.get('venue'):
-                existing['venue'] = p['venue']
-        else:
-            # If only in ORCID, add it.
-            # However, authors might be empty lists.
-            if not p['authors']:
-                p['authors'] = ["Patrycja Lebiecka-Johansen"] # Fallback
+        if key not in merged:
+            # New publication found! verify it's not just a minor title variation
             merged[key] = p
+        else:
+            # Entry exists. We generally trust the "existing" one (manual).
+            # Optional: We could try to fill missing fields if the existing one is sparse, 
+            # but users want control. Let's strictly preserve provided fields.
+            pass
             
     return sorted(merged.values(), key=lambda x: x['year'], reverse=True)
 
 if __name__ == "__main__":
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     
+    existing_data = load_existing_publications()
+    print(f"Loaded {len(existing_data)} existing publications.")
+
     # Run fetch
     scholar_data = fetch_google_scholar_publications(GOOGLE_SCHOLAR_ID)
     orcid_data = fetch_orcid_publications(ORCID_ID)
     
-    final_list = merge_publications(orcid_data, scholar_data)
+    final_list = merge_publications(existing_data, orcid_data, scholar_data)
     
     with open(OUTPUT_FILE, "w") as f:
         json.dump(final_list, f, indent=2)
