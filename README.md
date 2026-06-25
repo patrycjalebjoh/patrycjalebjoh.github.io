@@ -4,7 +4,6 @@ This is the source code for my personal academic website, hosted on GitHub Pages
 The site is fully static and features automatic publication updates from Google Scholar and ORCID.
 
 ## Features
-- **Automated Data Fetching**: A Python script fetches publications weekly.
 - **Modern Design**: Responsive, glassmorphism-inspired UI with dark mode.
 - **Maintenance Free**: GitHub Actions handle the data updates.
 
