@@ -10,7 +10,7 @@ AUTHOR_NAME = "Patrycja Lebiecka-Johansen"
 ORCID_ID = "0000-0001-8931-453X"
 OUTPUT_FILE = "assets/data/publications.json"
 
-def fetch_orcid_publications(orcid_id):
+def fetch_orcid_publications(orcid_id, existing_titles=None):
     print(f"Fetching ORCID data for {orcid_id}...")
     url = f"https://pub.orcid.org/v3.0/{orcid_id}/works"
     headers = {"Accept": "application/json"}
@@ -23,10 +23,22 @@ def fetch_orcid_publications(orcid_id):
         data = response.json()
         works = []
         
+        # Helper to normalize titles for duplicate checking
+        def normalize(text):
+            if not text: return ""
+            return ''.join(e for e in text if e.isalnum()).lower()
+
+        existing_normalized = set()
+        if existing_titles:
+            existing_normalized = {normalize(t) for t in existing_titles}
+
         for group in data.get("group", []):
             for work_summary in group.get("work-summary", []):
                 try:
                     title = work_summary["title"]["title"]["value"]
+                    normalized_title = normalize(title)
+                    is_existing = normalized_title in existing_normalized
+
                     year = work_summary.get("publication-date", {}).get("year", {}).get("value")
                     url = work_summary.get("url", {}).get("value") if work_summary.get("url") else None
                     
@@ -37,15 +49,30 @@ def fetch_orcid_publications(orcid_id):
                     if doi and not url:
                         url = f"https://doi.org/{doi}"
 
+                    # Fetch contributors if it's a new publication and put-code exists
+                    authors = []
+                    put_code = work_summary.get("put-code")
+                    if not is_existing and put_code:
+                        try:
+                            detail_url = f"https://pub.orcid.org/v3.0/{orcid_id}/work/{put_code}"
+                            detail_response = requests.get(detail_url, headers=headers, timeout=5)
+                            if detail_response.status_code == 200:
+                                detail_data = detail_response.json()
+                                contribs = detail_data.get("contributors", {}).get("contributor", [])
+                                for c in contribs:
+                                    c_name = c.get("credit-name", {}).get("value")
+                                    if c_name:
+                                        authors.append(c_name)
+                        except Exception as detail_err:
+                            print(f"Error fetching detailed ORCID work for put-code {put_code}: {detail_err}")
+
                     works.append({
                         "title": title,
                         "year": int(year) if year else 0,
                         "url": url,
                         "source": "ORCID",
                         "venue": work_summary.get("journal-title", {}).get("value"),
-                        # ORCID summary lacks full authors. We will rely on Google Scholar for the full list when merging,
-                        # or if this is the only source, we accept it as is.
-                        "authors": [] 
+                        "authors": authors
                     })
                 except Exception as e:
                     print(f"Skipping an ORCID entry due to error: {e}")
@@ -54,6 +81,7 @@ def fetch_orcid_publications(orcid_id):
     except Exception as e:
         print(f"Exception fetching ORCID: {e}")
         return []
+
 
 def fetch_google_scholar_publications(author_id):
     print(f"Searching Google Scholar for ID {author_id}...")
@@ -149,11 +177,14 @@ if __name__ == "__main__":
     existing_data = load_existing_publications()
     print(f"Loaded {len(existing_data)} existing publications.")
 
+    # Extract existing titles to avoid redundant detail requests in ORCID fetch
+    existing_titles = [p["title"] for p in existing_data]
+
     # Run fetch
     scholar_data = fetch_google_scholar_publications(GOOGLE_SCHOLAR_ID)
-    orcid_data = fetch_orcid_publications(ORCID_ID)
+    orcid_data = fetch_orcid_publications(ORCID_ID, existing_titles)
     
-    final_list = merge_publications(existing_data, orcid_data, scholar_data)
+    final_list = merge_publications(existing_data, scholar_data, orcid_data)
     
     with open(OUTPUT_FILE, "w") as f:
         json.dump(final_list, f, indent=2)
